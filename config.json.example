@@ -1,0 +1,14 @@
+{
+  "database": {
+    "host": "127.0.0.1",
+    "user": "opensea",
+    "password": "password",
+    "database": "opensea"
+  },
+  "floorChange": "Discord webhook URL for when floor price changes",
+  "floorLow": "Discord webhook URL for when floor price drops below threshold",
+  "slug": "OpenSea slug (eg. wilderbeasts-wolf)",
+  "contractAddress": "NFT contract address",
+  "ownerId": "discord ID of user to mention, set to blank to not mention",
+  "threshold": 0.155
+}

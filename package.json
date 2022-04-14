@@ -1,0 +1,17 @@
+{
+  "name": "opensea-wilderbeasts-wolf",
+  "version": "1.0.0",
+  "description": "A service to notify when floor price changes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MooCowGalaxy",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "dedent-js": "^1.0.1",
+    "discord-webhook-node": "^1.1.8",
+    "mysql": "^2.18.1"
+  }
+}
