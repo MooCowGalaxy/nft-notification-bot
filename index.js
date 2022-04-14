@@ -5,7 +5,8 @@ const config = require('./config.json')
 const { Webhook } = require('discord-webhook-node');
 
 // price change
-const pool = mysql.createPool(config.database)
+const dbEnabled = config.database.host.length > 0
+const pool = dbEnabled ? mysql.createPool(config.database) : null
 const webhook1 = new Webhook(config.floorChange)
 // threshold
 const webhook2 = new Webhook(config.floorLow)
@@ -32,9 +33,6 @@ function query(statement) {
             })
         })
     })
-}
-function e(o) {
-    return pool.escape(o)
 }
 
 async function getOSPrice() {
@@ -97,7 +95,7 @@ function start() {
                 ))
                 previousLR = current
             }
-            if (new Date().getMinutes() !== currentMinute) {
+            if (new Date().getMinutes() !== currentMinute && dbEnabled) {
                 currentMinute = new Date().getMinutes()
                 await query(`INSERT INTO wb_wolf (timestamp, value) VALUES (${currentMinute}, ${min(previousOS, previousLR)})`)
             }

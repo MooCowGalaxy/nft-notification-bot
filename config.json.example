@@ -1,6 +1,6 @@
 {
   "database": {
-    "host": "127.0.0.1",
+    "host": "database host - if you are not using a database, leave this field blank to disable saving",
     "user": "opensea",
     "password": "password",
     "database": "opensea"
