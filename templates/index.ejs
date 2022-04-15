@@ -102,6 +102,9 @@
                         responsive: true,
                         maintainAspectRatio: false
                     })
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 15 * 60 * 1000) // reload every 15 minutes
                 }
             })
         })

@@ -10,5 +10,8 @@
   "slug": "OpenSea slug (eg. wilderbeasts-wolf)",
   "contractAddress": "NFT contract address",
   "ownerId": "discord ID of user to mention, set to blank to not mention",
-  "threshold": 0.155
+  "threshold": 0.155,
+  "port": "80 (set to empty string or 0 to not enable web graph)",
+  "interval": 5
+
 }

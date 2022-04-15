@@ -82,7 +82,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 function start() {
     (async () => {
         console.log('Initializing...')
-        app.listen(config.port)
+        if (!isNaN(parseInt(config.port.toString())) && config.port !== 0) app.listen(config.port)
         previousOS = await getOSPrice()
         previousLR = await getLRPrice()
         await updateCache()
