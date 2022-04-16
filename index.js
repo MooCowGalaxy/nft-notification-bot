@@ -68,12 +68,22 @@ async function updateCache() {
 }
 
 async function getOSPrice() {
-    let data = await axios.get(`https://api.opensea.io/api/v1/collection/${slug}/stats`)
-    return data.data.stats.floor_price
+    try {
+        let data = await axios.get(`https://api.opensea.io/api/v1/collection/${slug}/stats`)
+        return data.data.stats.floor_price
+    } catch (e) {
+        if (previousOS) return previousOS
+        else throw e
+    }
 }
 async function getLRPrice() {
-    let data = await axios.get(`https://api.looksrare.org/api/v1/collections/stats?address=${address}`)
-    return Math.round(data.data.data.floorPrice / 100000000000000) / 10000
+    try {
+        let data = await axios.get(`https://api.looksrare.org/api/v1/collections/stats?address=${address}`)
+        return Math.round(data.data.data.floorPrice / 100000000000000) / 10000
+    } catch (e) {
+        if (previousLR) return previousLR
+        else throw e
+    }
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
