@@ -88,14 +88,13 @@ async function getLRPrice() {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 
-
 function start() {
     (async () => {
         console.log('Initializing...')
         if (!isNaN(parseInt(config.port.toString())) && config.port !== 0) app.listen(config.port)
         previousOS = await getOSPrice()
         previousLR = await getLRPrice()
-        await updateCache()
+        if (dbEnabled) await updateCache()
         console.log(`Successfully initialized.`)
         while (true) {
             let current = await getOSPrice()
@@ -114,8 +113,7 @@ function start() {
                     Previous FP: ${previousOS}Ξ
                     Service: OpenSea
                     Collection slug: ${slug}
-                    OS Link: <https://opensea.io/collection/${slug}>
-                    ${ownerId.length > 0 ? `<@${ownerId}>` : ''}`
+                    OS Link: <https://opensea.io/collection/${slug}>`
                 ))
                 previousOS = current
             }
@@ -136,8 +134,7 @@ function start() {
                     Previous FP: ${previousLR}Ξ
                     Service: LooksRare
                     Collection Address: ${address}
-                    LR Link: <https://looksrare.org/collections/${address}>
-                    ${ownerId.length > 0 ? `<@${ownerId}>` : ''}`
+                    LR Link: <https://looksrare.org/collections/${address}>`
                 ))
                 previousLR = current
             }

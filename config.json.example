@@ -6,12 +6,11 @@
     "database": "opensea"
   },
   "floorChange": "Discord webhook URL for when floor price changes",
-  "floorLow": "Discord webhook URL for when floor price drops below threshold",
+  "floorLow": "Discord webhook URL for when floor price drops below threshold (set threshold to 0 to disable)",
   "slug": "OpenSea slug (eg. wilderbeasts-wolf)",
   "contractAddress": "NFT contract address",
-  "ownerId": "discord ID of user to mention, set to blank to not mention",
+  "ownerId": "discord ID of user to mention, set empty to disable",
   "threshold": 0.155,
-  "port": "80 (set to empty string or 0 to not enable web graph)",
+  "port": "80 (set to empty string or 0 to disable web graph)",
   "interval": 5
-
 }
