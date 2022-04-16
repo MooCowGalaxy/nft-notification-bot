@@ -145,7 +145,7 @@ function start() {
                     if (currentMinute % interval === 0) cache.push([currentMinute, min(previousOS, previousLR)])
                 } catch {}
             }
-            await sleep(12000)
+            await sleep(10000)
         }
     })()
 }
