@@ -21,6 +21,7 @@ const slug = config.slug
 const address = config.contractAddress
 const ownerId = config.ownerId
 
+const maxEntries = config.webMaxEntries
 const interval = config.interval
 let cache = []
 
@@ -60,7 +61,7 @@ function query(statement) {
     })
 }
 async function updateCache() {
-    let results = await query(`SELECT * FROM (SELECT * FROM wb_wolf ORDER BY timestamp DESC LIMIT 3600)Var1 ORDER BY timestamp ASC`)
+    let results = await query(`SELECT * FROM (SELECT * FROM wb_wolf ORDER BY timestamp DESC LIMIT ${maxEntries})Var1 ORDER BY timestamp ASC`)
     cache = []
     for (let result of results) {
         if (result.timestamp % interval === 0) cache.push([result.timestamp, result.value === 0 ? null : result.value])
@@ -142,7 +143,12 @@ function start() {
                 currentMinute = Math.round(Date.now() / 60000)
                 try {
                     await query(`INSERT INTO wb_wolf (timestamp, value) VALUES (${currentMinute}, ${min(previousOS, previousLR)})`)
-                    if (currentMinute % interval === 0) cache.push([currentMinute, min(previousOS, previousLR)])
+                    if (currentMinute % interval === 0) {
+                        cache.push([currentMinute, min(previousOS, previousLR)])
+                        if (cache.length > maxEntries) {
+                            cache = cache.slice(1)
+                        }
+                    }
                 } catch {}
             }
             await sleep(10000)

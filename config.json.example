@@ -12,5 +12,6 @@
   "ownerId": "discord ID of user to mention, set empty to disable",
   "threshold": 0.155,
   "port": "80 (set to empty string or 0 to disable web graph)",
-  "interval": 5
+  "interval": 5,
+  "webMaxEntries": 1440
 }
