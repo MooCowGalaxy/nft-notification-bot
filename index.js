@@ -12,14 +12,15 @@ const dbEnabled = config.database.host.length > 0
 const pool = dbEnabled ? mysql.createPool(config.database) : null
 const webhook1 = new Webhook(config.floorChange)
 // threshold
-const webhook2 = new Webhook(config.floorLow)
-const threshold = config.threshold
+const webhook2 = new Webhook(config.floorThreshold)
+const minThreshold = config.minThreshold
+const maxThreshold = config.maxThreshold
 let previousOS = null
 let previousLR = null
 let currentMinute = Math.round(Date.now() / 60000)
 const slug = config.slug
 const address = config.contractAddress
-const ownerId = config.ownerId
+const thresholdText = config.thresholdText
 
 const maxEntries = config.webMaxEntries
 const interval = config.interval
@@ -100,14 +101,22 @@ function start() {
         while (true) {
             let current = await getOSPrice()
             if (current !== previousOS) {
-                if (current < threshold) {
+                if (current < minThreshold) {
                     await webhook2.send(dedent(
-                        `**New low FP**: ${current}Ξ
+                        `📉 **New low FP**: ${current}Ξ
                         Previous FP: ${previousOS}Ξ
                         Service: OpenSea
                         Collection slug: ${slug}
                         OS Link: <https://opensea.io/collection/${slug}>
-                        ${ownerId.length > 0 ? `<@${ownerId}>` : ''}`))
+                        ${thresholdText.length > 0 ? thresholdText : ''}`))
+                } else if (current > maxThreshold) {
+                    await webhook2.send(dedent(
+                        `📈 **New HIGH FP**: ${current}Ξ
+                        Previous FP: ${previousOS}Ξ
+                        Service: OpenSea
+                        Collection slug: ${slug}
+                        OS Link: <https://opensea.io/collection/${slug}>
+                        ${thresholdText.length > 0 ? thresholdText : ''}`))
                 }
                 await webhook1.send(dedent(
                     `New FP: ${current}Ξ
@@ -120,15 +129,22 @@ function start() {
             }
             current = await getLRPrice()
             if (current !== previousLR) {
-                if (current < threshold) {
+                if (current < minThreshold) {
                     await webhook2.send(dedent(
-                        `**New low FP**: ${current}Ξ
+                        `📉 **New low FP**: ${current}Ξ
                         Previous FP: ${previousLR}Ξ
                         Service: LooksRare
                         Collection Address: ${address}
                         LR Link: <https://looksrare.org/collections/${address}>
-                        ${ownerId.length > 0 ? `<@${ownerId}>` : ''}`
-                    ))
+                        ${thresholdText.length > 0 ? thresholdText : ''}`))
+                } else if (current > maxThreshold) {
+                    await webhook2.send(dedent(
+                        `📈 **New HIGH FP**: ${current}Ξ
+                        Previous FP: ${previousLR}Ξ
+                        Service: LooksRare
+                        Collection Address: ${address}
+                        LR Link: <https://looksrare.org/collections/${address}>
+                        ${thresholdText.length > 0 ? thresholdText : ''}`))
                 }
                 await webhook1.send(dedent(
                     `New FP: ${current}Ξ
