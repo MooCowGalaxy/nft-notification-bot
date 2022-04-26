@@ -127,40 +127,42 @@ function start() {
                 ))
                 previousOS = current
             }
-            current = await getLRPrice()
-            if (current !== previousLR) {
-                if (current < minThreshold) {
-                    await webhook2.send(dedent(
-                        `📉 **New low FP**: ${current}Ξ
+            if (config.LREnabled) {
+                current = await getLRPrice()
+                if (current !== previousLR) {
+                    if (current < minThreshold) {
+                        await webhook2.send(dedent(
+                            `📉 **New low FP**: ${current}Ξ
                         Previous FP: ${previousLR}Ξ
                         Service: LooksRare
                         Collection Address: ${address}
                         LR Link: <https://looksrare.org/collections/${address}>
                         ${thresholdText.length > 0 ? thresholdText : ''}`))
-                } else if (current > maxThreshold) {
-                    await webhook2.send(dedent(
-                        `📈 **New HIGH FP**: ${current}Ξ
+                    } else if (current > maxThreshold) {
+                        await webhook2.send(dedent(
+                            `📈 **New HIGH FP**: ${current}Ξ
                         Previous FP: ${previousLR}Ξ
                         Service: LooksRare
                         Collection Address: ${address}
                         LR Link: <https://looksrare.org/collections/${address}>
                         ${thresholdText.length > 0 ? thresholdText : ''}`))
-                }
-                await webhook1.send(dedent(
-                    `New FP: ${current}Ξ
+                    }
+                    await webhook1.send(dedent(
+                        `New FP: ${current}Ξ
                     Previous FP: ${previousLR}Ξ
                     Service: LooksRare
                     Collection Address: ${address}
                     LR Link: <https://looksrare.org/collections/${address}>`
-                ))
-                previousLR = current
+                    ))
+                    previousLR = current
+                }
             }
             if (Math.round(Date.now() / 60000) !== currentMinute && dbEnabled) {
                 currentMinute = Math.round(Date.now() / 60000)
                 try {
-                    await query(`INSERT INTO wb_wolf (timestamp, value) VALUES (${currentMinute}, ${min(previousOS, previousLR)})`)
+                    await query(`INSERT INTO wb_wolf (timestamp, value) VALUES (${currentMinute}, ${config.LREnabled ? min(previousOS, previousLR) : previousOS})`)
                     if (currentMinute % interval === 0) {
-                        cache.push([currentMinute, min(previousOS, previousLR)])
+                        cache.push([currentMinute, config.LREnabled ? min(previousOS, previousLR) : previousOS])
                         if (cache.length > maxEntries) {
                             cache = cache.slice(1)
                         }

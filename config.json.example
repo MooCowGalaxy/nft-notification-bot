@@ -9,6 +9,7 @@
   "floorThreshold": "Discord webhook URL for when floor price goes over min or under max threshold (set threshold to 0/9999 to disable)",
   "slug": "OpenSea slug (eg. wilderbeasts-wolf)",
   "contractAddress": "NFT contract address",
+  "LREnabled": false,
   "thresholdText": "additional text to send (can be @everyone ping or something like that), set to empty to disable",
   "minThreshold": 0.1,
   "maxThreshold": 1,
