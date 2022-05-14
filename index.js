@@ -40,7 +40,7 @@ app.get('/', async (req, res) => {
     res.send(await renderFile('index', {slug}))
 })
 app.get('/api/stats', async (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*')
+    // res.header('Access-Control-Allow-Origin', '*')
     res.json(cache)
 })
 
