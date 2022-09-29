@@ -63,7 +63,7 @@ function query(statement) {
     })
 }
 async function updateCache() {
-    let results = await query(`SELECT * FROM (SELECT * FROM wb_wolf ORDER BY timestamp DESC LIMIT ${maxEntries})Var1 ORDER BY timestamp ASC`)
+    let results = await query(`SELECT * FROM (SELECT * FROM price_history ORDER BY timestamp DESC LIMIT ${maxEntries})Var1 ORDER BY timestamp ASC`)
     cache = []
     for (let result of results) {
         if (result.timestamp % interval === 0) cache.push([result.timestamp, result.value === 0 ? null : result.value])
@@ -161,7 +161,7 @@ function start() {
             if (Math.round(Date.now() / 60000) !== currentMinute && dbEnabled) {
                 currentMinute = Math.round(Date.now() / 60000)
                 try {
-                    await query(`INSERT INTO wb_wolf (timestamp, value) VALUES (${currentMinute}, ${config.LREnabled ? min(previousOS, previousLR) : previousOS})`)
+                    await query(`INSERT INTO price_history (timestamp, value) VALUES (${currentMinute}, ${config.LREnabled ? min(previousOS, previousLR) : previousOS})`)
                     if (currentMinute % interval === 0) {
                         cache.push([currentMinute, config.LREnabled ? min(previousOS, previousLR) : previousOS])
                         if (cache.length > maxEntries) {
